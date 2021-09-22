@@ -2,6 +2,8 @@ import React from 'react';
 import Logo from '../Logo/Logo';
 import Link from 'next/link';
 
+import styles from './Header.module.scss';
+
 const Header = () => {
     const pages = [
         {
@@ -15,27 +17,25 @@ const Header = () => {
     ]
 
     return(
-        <header>
-            <div>
-                <Logo/>
-                <nav>
-                    <ul>
-                        {
-                            pages.map(page=>{
-                                return(
-                                    <li key = {page.name}>
-                                        <Link href={page.url}>
-                                            <a>
-                                                {page.name}
-                                            </a>
-                                        </Link>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
-                </nav>
-            </div>
+        <header className ={styles.header}>
+            <Logo/>
+            <nav>
+                <ul>
+                    {
+                        pages.map(page=>{
+                            return(
+                                <li key = {page.name}>
+                                    <Link href={page.url}>
+                                        <a>
+                                            {page.name}
+                                        </a>
+                                    </Link>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+            </nav>
         </header>
     );
 };
