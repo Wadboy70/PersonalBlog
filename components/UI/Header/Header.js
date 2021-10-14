@@ -17,14 +17,14 @@ const Header = () => {
     ]
 
     return(
-        <header className ={styles.header}>
+        <header className={styles.header}>
             <Logo/>
             <nav>
-                <ul>
+                <ul className={styles.header_list}>
                     {
                         pages.map(page=>{
                             return(
-                                <li key = {page.name}>
+                                <li key={page.name}>
                                     <Link href={page.url}>
                                         <a>
                                             {page.name}

@@ -3,5 +3,18 @@
   flex-flow: row;
   justify-content: space-between;
   width: 100%;
-  height: 4rem;
+  height: 2rem;
+  margin-bottom: 2rem;
+  @media only screen and (min-width: 481px) {
+    height: 4rem;
+  }
+}
+.header_list {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  li {
+    margin-left: 2rem;
+    font-size: 1.2rem;
+  }
 }
