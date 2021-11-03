@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^5.5.0",
     "@tryghost/content-api": "^1.5.13",
     "next": "11.1.2",
     "react": "17.0.2",
