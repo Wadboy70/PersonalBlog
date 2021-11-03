@@ -1,0 +1,82 @@
+@import "../colors.scss";
+.homeContainer {
+  display: flex;
+  height: 85vh;
+  border-bottom: black 5px solid;
+}
+.homeContainer__seyi {
+  height: 100%;
+  display: none;
+  @media only screen and (min-width: 1200px) {
+    display: block;
+  }
+}
+.homeContainer__homeHeroText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1,
+  p {
+    text-align: end;
+    margin: 0;
+    margin: 1rem 0;
+    white-space: nowrap;
+  }
+  h1 {
+    font-size: 7rem;
+    letter-spacing: 0.5rem;
+    line-height: 90%;
+  }
+  p {
+    font-size: 1rem;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    align-items: unset;
+  }
+  @media only screen and (min-width: 600px) {
+    h1 {
+      font-size: 10rem;
+    }
+    p {
+      font-size: 1.5rem;
+    }
+  }
+}
+.homeHeroText__CTA {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  button {
+    font-size: 1.2rem;
+    margin-left: 2rem;
+    padding: 2rem 1rem;
+    border: none;
+    border-radius: 2.8rem;
+    background-color: $pink;
+  }
+}
+// From Sebastian Laube on Codepen
+// https://codepen.io/bitstarr/pen/XjaJGz
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
