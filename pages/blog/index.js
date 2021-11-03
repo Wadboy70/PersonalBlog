@@ -1,4 +1,4 @@
-import { getPosts } from "../lib/functions";
+import { getPosts } from "../../lib/functions";
 import Link from "next/link";
 
 const Blog = ({posts}) => {
