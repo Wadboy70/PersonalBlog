@@ -2,14 +2,10 @@
   font-family: "Montserrat", sans-serif;
   box-sizing: border-box;
 }
-html,
-body {
-  height: 100%;
-}
 body {
   background-color: #e8e8e8;
   padding: 0.5rem 0.75rem;
-
+  margin: 0;
   @media only screen and (min-width: 600px) {
     padding: 0.5rem 3rem;
   }

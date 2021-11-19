@@ -1,7 +1,5 @@
 import styles from 'components/index/index.module.scss';
 import Arrow from '../public/Arrow.svg';
-import { getRecentPost } from 'lib/functions';
-import Post from 'components/Post/Post';
 
 
 const Index = ({notFound, post}) => (
@@ -18,25 +16,7 @@ const Index = ({notFound, post}) => (
         </div>
       </div>
     </div>
-    {
-      !notFound &&
-      <Post data={post}/>
-    }
   </>
 );
-
-export async function getStaticProps(context) {
-  const post = await getRecentPost();
-
-  if (!post || !post.length) {
-    return {
-      notFound: true,
-    };
-  }
-  return {
-    props: { post: post[0] },
-    revalidate: 1,
-  };
-};
 
 export default Index;
