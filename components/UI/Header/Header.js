@@ -7,8 +7,8 @@ import styles from './Header.module.scss';
 const Header = () => {
     const pages = [
         {
-            name: 'Blog',
-            url: '/blog'
+            name: 'Home',
+            url: '/'
         },
         {
             name: 'About',
