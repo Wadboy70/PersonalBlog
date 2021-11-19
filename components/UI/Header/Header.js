@@ -34,6 +34,11 @@ const Header = () => {
                             )
                         })
                     }
+                    <li>
+                        <a href="https://seyio.substack.com" target="_blank">
+                            Blog
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </header>

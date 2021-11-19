@@ -1,0 +1,60 @@
+@import "../colors.scss";
+.scrollWindow {
+  min-height: 10vh;
+  height: 7rem;
+  width: fit-content;
+  max-width: 80vw;
+  background-color: #eeeeee;
+  border-radius: 30px;
+  box-shadow: 0 0px 1px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    display: block;
+    height: 5px;
+    padding-bottom: 2px;
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #a1a1a1;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background: transparent;
+    margin: 0 30px;
+  }
+
+  //   &::-webkit-scrollbar-track-piece:start {
+  //     background: transparent;
+  //     margin-right: 10px;
+  //   }
+  @media only screen and (min-width: 600px) {
+    overflow-x: unset;
+    overflow-y: unset;
+  }
+}
+.scrollWindow_socialLink {
+  height: 80%;
+  margin: 0 1rem;
+  position: relative;
+  svg {
+    height: 100%;
+    width: auto;
+  }
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.1) translateY(0);
+  }
+  &:hover {
+    @media only screen and (min-width: 600px) {
+      transform: scale(1.1) translateY(-2rem);
+      height: 120%;
+    }
+  }
+}
