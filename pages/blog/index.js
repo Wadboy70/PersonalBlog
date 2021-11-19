@@ -1,18 +1,16 @@
 import { getPosts } from "lib/functions";
-import Link from "next/link";
+import BlogListing from "components/BlogListing/BlogListing";
 
 const Blog = ({posts}) => {
 
-    return(                    
+    return(      
+      <div>
         <ul>
             {posts.map((post) => (
-            <li key={post.id}>
-                <Link href={`/posts/${post.slug}`}>
-                <a>{post.title}</a>
-                </Link>
-            </li>
+              <BlogListing key={post.id} post={post}/>
             ))}
         </ul>
+      </div>              
     );
 };
 
