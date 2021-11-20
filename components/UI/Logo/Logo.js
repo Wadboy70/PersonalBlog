@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from 'public/logo.png'
 
 import styles from './Logo.module.scss';
 import Link from 'components/Link/Link';

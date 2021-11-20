@@ -1,4 +1,4 @@
-import styles from 'components/index/index.module.scss';
+import styles from 'components/styles/index.module.scss';
 import ScrollWindow from 'components/ScrollWindow/ScrollWindow';
 import Arrow from '../public/Arrow.svg';
 

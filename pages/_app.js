@@ -1,4 +1,4 @@
-import 'components/app.scss';
+import 'components/styles/app.scss';
 import Header from 'components/UI/Header/Header';
 import Head from 'next/head';
 
