@@ -3,9 +3,14 @@
   flex-flow: row;
   position: relative;
 }
+.logoContainer_logo {
+  width: auto;
+  height: 100%;
+}
 .logoContainer_name {
   display: flex;
   align-items: center;
+  font-size: 1rem;
   margin-left: 0.5rem;
   @media only screen and (min-width: 481px) {
     font-size: 1.5rem;
