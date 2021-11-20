@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from "public/Logo.svg";
+import Logo from "public/LogoVector.svg";
 import styles from "components/styles/about.module.scss";
 
 const About = () => {
