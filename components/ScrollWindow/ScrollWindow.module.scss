@@ -3,15 +3,15 @@
   min-height: 10vh;
   height: 7rem;
   width: fit-content;
-  max-width: 80vw;
+  max-width: 80%;
   background-color: #eeeeee;
   border-radius: 30px;
   box-shadow: 0 0px 1px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: flex;
-  justify-content: center;
   align-items: center;
   overflow-x: scroll;
   overflow-y: hidden;
+  padding: 0 25px;
   &::-webkit-scrollbar {
     display: block;
     height: 5px;
@@ -29,14 +29,10 @@
     background: transparent;
     margin: 0 30px;
   }
-
-  //   &::-webkit-scrollbar-track-piece:start {
-  //     background: transparent;
-  //     margin-right: 10px;
-  //   }
-  @media only screen and (min-width: 600px) {
-    overflow-x: unset;
+  @media only screen and (min-width: 768px) {
+    overflow-x: initial;
     overflow-y: unset;
+    max-width: 100%;
   }
 }
 .scrollWindow_socialLink {
@@ -48,10 +44,13 @@
     width: auto;
   }
   transition: all 0.2s ease-in-out;
-  &:hover {
+  &:hover,
+  &:focus {
     transform: scale(1.1) translateY(0);
+    outline: none;
   }
-  &:hover {
+  &:hover,
+  &:focus {
     @media only screen and (min-width: 600px) {
       transform: scale(1.1) translateY(-2rem);
       height: 120%;

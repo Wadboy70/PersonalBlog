@@ -4,10 +4,14 @@
   height: 85vh;
 }
 .homeContainer__seyi {
-  height: 100%;
+  height: 90%;
   display: none;
+  align-self: flex-end;
   @media only screen and (min-width: 1200px) {
     display: block;
+  }
+  @media only screen and (min-width: 1280px) {
+    height: 100%;
   }
 }
 .homeContainer__homeHeroText {
@@ -16,6 +20,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-height: 85vh;
+  max-width: 100%;
   h1,
   p {
     margin: 0;
@@ -27,6 +33,7 @@
     letter-spacing: 0.25rem;
     line-height: 90%;
     white-space: nowrap;
+    margin-bottom: 0;
   }
   p {
     font-size: 1rem;
