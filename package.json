@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && next dev",
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && next build",
+    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@svgr/webpack": "^5.5.0",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "firebase": "^9.8.2",
+    "firebase-admin": "^10.2.0",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-draft-wysiwyg": "^1.14.7",
+    "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.39.2"
   },
   "devDependencies": {
