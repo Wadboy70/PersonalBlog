@@ -6,12 +6,17 @@ import {
   mergeFirestoreDoc,
 } from "lib/firestore";
 import { useRouter } from "next/router";
-import { Editor } from "react-draft-wysiwyg";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { stateToHTML } from "draft-js-export-html";
 import { useEffect, useState } from "react";
 import styles from "components/styles/admin.module.scss";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
 
 const Admin = () => {
   const { signInWithGoogle, authUser, loading } = useAuth();
