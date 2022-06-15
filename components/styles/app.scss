@@ -4,11 +4,7 @@
 }
 body {
   background-color: #e8e8e8;
-  padding: 0.5rem 0.75rem;
   margin: 0;
-  @media only screen and (min-width: 600px) {
-    padding: 0.5rem 3rem;
-  }
 }
 h1,
 h2,
@@ -29,4 +25,12 @@ a:visited,
 a:link {
   text-decoration: inherit;
   color: inherit;
+}
+.pageContainer{
+  min-height: 100vh;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  @media only screen and (min-width: 600px) {
+    padding: 0.5rem 3rem;
+  }
 }

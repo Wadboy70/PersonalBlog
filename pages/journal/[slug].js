@@ -4,7 +4,7 @@ import styles from "components/styles/journal.module.scss";
 
 const PostPage = ({ post }) => {
   const parsedPost = JSON.parse(post);
-  const date = new Date(parsedPost.date._seconds * 1000);
+  const date = new Date(parsedPost.date?._seconds * 1000);
   return (
     <div className={styles.container}>
       <h1>{parsedPost.name}</h1>

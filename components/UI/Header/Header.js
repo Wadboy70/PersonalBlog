@@ -14,14 +14,10 @@ const Header = () => {
       name: "About",
       url: "/about",
     },
-    // {
-    //   name: "Journal",
-    //   url: "/journal",
-    // },
-    // {
-    //   name: "Admin",
-    //   url: "/admin",
-    // },
+    {
+      name: "Journal",
+      url: "/journal",
+    },
   ];
 
   return (

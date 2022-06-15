@@ -7,6 +7,4 @@ module.exports = {
     });
     return config;
   },
-  useFileSystemPublicRoutes: false,
-  exportTrailingSlash: true,
 };

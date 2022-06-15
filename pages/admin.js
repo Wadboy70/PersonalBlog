@@ -23,8 +23,9 @@ const Admin = () => {
 
   const router = useRouter();
   const [validUser, setValidUser] = useState(false);
+  const [password, setPassword] = useState("");
   const [editor, setEditor] = useState(EditorState.createEmpty());
-  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
   const defaultMetadata = {
     name: "",
     slug: "",
@@ -36,7 +37,7 @@ const Admin = () => {
       (new Date().getDate() + "").padStart(2, "0"),
     description: "",
     thumbnailUrl: "",
-    tags: [],
+    tags: "",
   };
   const [metadata, setMetadata] = useState(defaultMetadata);
 
@@ -58,52 +59,75 @@ const Admin = () => {
     }
   });
 
+  const redeploy = async () => {
+    const credentials = Buffer.from(password).toString("base64");
+    const auth = { Authorization: `Basic ${credentials}` };
+    const deployInfo = await fetch("/api/blog", { headers: auth });
+    if (deployInfo.status != 200) {
+      setMessage("Not Redeployed");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      !metadata.slug ||
+      !metadata.name ||
+      stateToHTML(editor.getCurrentContent()) === ""
+    ) {
+      alert("Finish the form!");
+      return;
+    }
+    const exists = await getSingleFirestoreDoc(
+      COLLECTION_NAMES.JOURNALS,
+      metadata.slug
+    );
+    if (exists?.error) {
+      alert("Firebase error");
+      console.log(exists);
+      return;
+    }
+    if (exists) {
+      console.log(exists);
+      const overwrite = confirm(
+        "this journal url name already exists! Want to overwrite this entry?"
+      );
+      if (!overwrite) return;
+    }
+    console.log(stateToHTML(editor.getCurrentContent()));
+    const dateArr = metadata.date.split("-");
+    const date = new Date(
+      `${dateArr[0]}-${dateArr[1]}-${String(Number(dateArr[2]) + 1).padStart(
+        2,
+        "0"
+      )}`
+    );
+    console.log(date);
+    mergeFirestoreDoc(
+      {
+        ...metadata,
+        tags:
+          metadata.tags
+            ?.split(",")
+            .map((val) => val.trim())
+            .filter((val) => !!val.length) || [],
+        entry: stateToHTML(editor.getCurrentContent()),
+        date: date,
+      },
+      COLLECTION_NAMES.JOURNALS,
+      metadata.slug
+    );
+    await redeploy();
+    setEditor(EditorState.createEmpty());
+    setMetadata(defaultMetadata);
+  };
+
   return (
     <div>
       <h1>Admin Page</h1>
       {!authUser && <button onClick={signInWithGoogle}>Sign In</button>}
       {validUser && (
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (
-              !metadata.slug ||
-              !metadata.name ||
-              stateToHTML(editor.getCurrentContent()) === ""
-            ) {
-              alert("Finish the form!");
-              return;
-            }
-            const exists = await getSingleFirestoreDoc(
-              COLLECTION_NAMES.JOURNALS,
-              metadata.slug
-            );
-            if (exists?.error) {
-              alert("Firebase error");
-              console.log(exists);
-              return;
-            }
-            if (exists) {
-              console.log(exists);
-              const overwrite = confirm(
-                "this journal url name already exists! Want to overwrite this entry?"
-              );
-              if (!overwrite) return;
-            }
-            console.log(stateToHTML(editor.getCurrentContent()));
-            mergeFirestoreDoc(
-              {
-                ...metadata,
-                tags: metadata.tags.split(",").map((val) => val.trim()),
-                entry: stateToHTML(editor.getCurrentContent()),
-              },
-              COLLECTION_NAMES.JOURNALS,
-              metadata.slug
-            );
-            setEditor(EditorState.createEmpty());
-            setMetadata(defaultMetadata);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <InputWithLabel
             label="Name"
             type="text"
@@ -124,6 +148,7 @@ const Admin = () => {
             label="Date"
             type="date"
             value={metadata.date}
+            defaultValue={defaultMetadata.date}
             onChange={(e) => setMetadata({ ...metadata, date: e.target.value })}
             id="articleDate"
           />
@@ -155,6 +180,14 @@ const Admin = () => {
             id="articleTags"
             placeholder="Tags"
           />
+          <InputWithLabel
+            label="Admin Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="adminPassword"
+            placeholder="Password"
+          />
           <Editor
             editorState={editor}
             onEditorStateChange={(state) => setEditor(state)}
@@ -162,7 +195,7 @@ const Admin = () => {
           <button>Submit</button>
         </form>
       )}
-      {error && <p>{error}</p>}
+      {message && <p>{message}</p>}
     </div>
   );
 };

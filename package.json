@@ -10,19 +10,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@svgr/webpack": "^5.5.0",
+    "@svgr/webpack": "^6.2.1",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "firebase": "^9.8.2",
     "firebase-admin": "^10.2.0",
-    "next": "11.1.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "next": "12.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-draft-wysiwyg": "^1.14.7",
     "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.39.2"
   },
   "devDependencies": {
-    "eslint": "7.32.0"
+    "eslint": "8.17.0"
   }
 }
