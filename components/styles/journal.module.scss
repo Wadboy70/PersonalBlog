@@ -1,6 +1,7 @@
 .container{
     width: 40%;
-    min-width: 450px;
+    min-width: 350px;
+    max-width: 90%;
     overflow-wrap: break-word;
     margin: 0 auto;
 }
@@ -67,4 +68,38 @@
 
 .disableButton{
     opacity: .5;
+}
+
+.arrow{
+    width: 1rem;
+    border: none;
+    background: inherit;
+    height: auto;
+    margin-right: .5rem;
+    transform: rotate(90deg);
+}
+
+.arrowContainer{
+    border: none;
+    background-color: inherit;
+    display: flex;
+    margin-bottom: .5rem;
+    display: flex;
+}
+
+.flipped{
+    transform: rotate(-90deg);
+}
+
+.navigationContainer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.flippedContainer{
+    flex-direction: row-reverse;
+    .arrow{
+        margin-left: .5rem;
+        margin-right: 0;
+    }
 }

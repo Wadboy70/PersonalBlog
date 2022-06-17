@@ -6,10 +6,10 @@ import styles from "./Header.module.scss";
 
 const Header = () => {
   const pages = [
-    {
-      name: "Home",
-      url: "/",
-    },
+    // {
+    //   name: "Home",
+    //   url: "/",
+    // },
     {
       name: "About",
       url: "/about",

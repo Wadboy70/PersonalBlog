@@ -15,8 +15,8 @@ const Journal = ({ posts }) => {
         <h1>Daily Journal</h1>
       </div>
       <p>
-        Daily updates on my life, things I'm working, and the ups and downs of
-        being Seyi :)
+        Daily updates on my life, things I'm working on, and the ups and downs
+        of being Seyi :)
       </p>
       {parsedPosts.slice(0, postNum + 1).map((post, index) => (
         <JournalPost post={post} key={index} />

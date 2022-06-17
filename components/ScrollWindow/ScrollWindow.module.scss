@@ -44,13 +44,11 @@
     width: auto;
   }
   transition: all 0.2s ease-in-out;
-  &:hover,
-  &:focus {
+  &:hover{
     transform: scale(1.1) translateY(0);
     outline: none;
   }
-  &:hover,
-  &:focus {
+  &:hover{
     @media only screen and (min-width: 600px) {
       transform: scale(1.1) translateY(-2rem);
       height: 120%;
