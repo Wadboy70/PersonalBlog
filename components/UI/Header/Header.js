@@ -3,13 +3,11 @@ import Logo from "../Logo/Logo";
 import Link from "next/link";
 
 import styles from "./Header.module.scss";
+import { useAuth } from "lib/AuthUserContext";
 
 const Header = () => {
+  const { signOutFirebaseUser, authUser } = useAuth();
   const pages = [
-    // {
-    //   name: "Home",
-    //   url: "/",
-    // },
     {
       name: "About",
       url: "/about",
@@ -38,6 +36,11 @@ const Header = () => {
             <a href="https://seyio.substack.com" target="_blank">
               Blog
             </a>
+          </li>
+          <li>
+            {authUser && (
+              <button onClick={signOutFirebaseUser}>Sign Out</button>
+            )}
           </li>
         </ul>
       </nav>

@@ -6,7 +6,7 @@ import {
   mergeFirestoreDoc,
 } from "lib/firestore";
 import { useRouter } from "next/router";
-import { EditorState } from "draft-js";
+import { ContentState, EditorState, convertFromHTML } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { stateToHTML } from "draft-js-export-html";
 import { useEffect, useState } from "react";
@@ -18,44 +18,48 @@ const Editor = dynamic(
   { ssr: false }
 );
 
-const Admin = () => {
-  const { signInWithGoogle, authUser, loading } = useAuth();
+const Admin = ({ post }) => {
+  const { signInWithGoogle, authUser, validUser } = useAuth();
+
+  const parsedPost = typeof window !== "undefined" && post && JSON.parse(post);
+
+  const blocksFromHTML = parsedPost?.entry && convertFromHTML(parsedPost.entry);
+  const state =
+    parsedPost?.entry &&
+    ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
 
   const router = useRouter();
-  const [validUser, setValidUser] = useState(false);
   const [password, setPassword] = useState("");
-  const [editor, setEditor] = useState(EditorState.createEmpty());
+  const [editor, setEditor] = useState(
+    parsedPost?.entry
+      ? EditorState.createWithContent(state)
+      : EditorState.createEmpty()
+  );
   const [message, setMessage] = useState(null);
+  const date = parsedPost?.date
+    ? new Date(parsedPost.date.seconds * 1000)
+    : new Date();
   const defaultMetadata = {
-    name: "",
-    slug: "",
+    name: parsedPost?.name || "",
+    slug: parsedPost?.slug || "",
     date:
-      new Date().getUTCFullYear() +
+      date.getUTCFullYear() +
       "-" +
-      (new Date().getUTCMonth() + 1 + "").padStart(2, "0") +
+      (date.getUTCMonth() + 1 + "").padStart(2, "0") +
       "-" +
-      (new Date().getDate() + "").padStart(2, "0"),
-    description: "",
-    thumbnailUrl: "",
-    tags: "",
+      (date.getDate() + "").padStart(2, "0"),
+    description: parsedPost?.description || "",
+    thumbnailUrl: parsedPost?.thumbnailUrl || "",
+    tags: parsedPost?.tags?.join(", ") || "",
   };
   const [metadata, setMetadata] = useState(defaultMetadata);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const result = await getSingleFirestoreDoc(
-        COLLECTION_NAMES.USERS,
-        authUser.email
-      );
-
-      if (result && !result.error) {
-        setValidUser(true);
-        return;
-      }
+    if (validUser === null) {
       router.push("/");
-    };
-    if (authUser) {
-      checkAuth();
     }
   });
 
@@ -70,6 +74,8 @@ const Admin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const submit = confirm("Submit?");
+    if (!submit) return;
     if (
       !metadata.slug ||
       !metadata.name ||
@@ -148,7 +154,6 @@ const Admin = () => {
             label="Date"
             type="date"
             value={metadata.date}
-            defaultValue={defaultMetadata.date}
             onChange={(e) => setMetadata({ ...metadata, date: e.target.value })}
             id="articleDate"
           />
@@ -201,3 +206,15 @@ const Admin = () => {
 };
 
 export default Admin;
+
+export const getServerSideProps = async ({ query }) => {
+  const { slug } = query;
+  if (!slug) return { props: {} };
+
+  const rawPost = await getSingleFirestoreDoc(COLLECTION_NAMES.JOURNALS, slug);
+
+  if (!rawPost || rawPost.error) return { props: {} };
+
+  const post = JSON.stringify(rawPost);
+  return { props: { post } };
+};

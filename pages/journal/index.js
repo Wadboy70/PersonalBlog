@@ -3,6 +3,7 @@ import { COLLECTION_NAMES } from "lib/firestore";
 import { db as serverDb } from "lib/firestoreServer";
 import styles from "components/styles/journal.module.scss";
 import { useState } from "react";
+import { useAuth } from "lib/AuthUserContext";
 
 const Journal = ({ posts }) => {
   const parsedPosts = JSON.parse(posts);
@@ -48,6 +49,7 @@ const Journal = ({ posts }) => {
 };
 
 const JournalPost = ({ post }) => {
+  const { validUser } = useAuth();
   const date = post.date?._seconds ? new Date(post.date._seconds * 1000) : null;
   return (
     <Link href={"/journal/" + post.slug} passHref>
@@ -71,6 +73,11 @@ const JournalPost = ({ post }) => {
                 </span>
               ))}
             </span>
+            {validUser && (
+              <Link href={`/admin?slug=${post.slug}`}>
+                <a>Edit</a>
+              </Link>
+            )}
           </span>
         </div>
         {post.description && (
