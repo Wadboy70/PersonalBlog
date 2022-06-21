@@ -12,70 +12,72 @@ import { stateToHTML } from "draft-js-export-html";
 import { useEffect, useState } from "react";
 import styles from "components/styles/admin.module.scss";
 import dynamic from "next/dynamic";
+import useForm from "lib/useForm";
 
 const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
 );
 
+const redeploy = async (password = "", setMessage = () => {}) => {
+  const credentials = Buffer.from(password).toString("base64");
+  const auth = { Authorization: `Basic ${credentials}` };
+  const deployInfo = await fetch("/api/blog", { headers: auth });
+  if (deployInfo.status != 200) {
+    setMessage("Not Redeployed");
+  }
+};
+
 const Admin = ({ post }) => {
-  const { signInWithGoogle, authUser, validUser } = useAuth();
-
-  const parsedPost = typeof window !== "undefined" && post && JSON.parse(post);
-
-  const blocksFromHTML = parsedPost?.entry && convertFromHTML(parsedPost.entry);
-  const state =
-    parsedPost?.entry &&
-    ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
-
   const router = useRouter();
-  const [password, setPassword] = useState("");
-  const [editor, setEditor] = useState(
-    parsedPost?.entry
-      ? EditorState.createWithContent(state)
-      : EditorState.createEmpty()
-  );
-  const [message, setMessage] = useState(null);
-  const date = parsedPost?.date
-    ? new Date(parsedPost.date.seconds * 1000)
-    : new Date();
-  const defaultMetadata = {
-    name: parsedPost?.name || "",
-    slug: parsedPost?.slug || "",
-    date:
-      date.getUTCFullYear() +
-      "-" +
-      (date.getUTCMonth() + 1 + "").padStart(2, "0") +
-      "-" +
-      (date.getDate() + "").padStart(2, "0"),
-    description: parsedPost?.description || "",
-    thumbnailUrl: parsedPost?.thumbnailUrl || "",
-    tags: parsedPost?.tags?.join(", ") || "",
-  };
-  const [metadata, setMetadata] = useState(defaultMetadata);
-
+  const { signInWithGoogle, authUser, validUser } = useAuth();
   useEffect(() => {
     if (validUser === null) {
       router.push("/");
     }
   });
 
-  const redeploy = async () => {
-    const credentials = Buffer.from(password).toString("base64");
-    const auth = { Authorization: `Basic ${credentials}` };
-    const deployInfo = await fetch("/api/blog", { headers: auth });
-    if (deployInfo.status != 200) {
-      setMessage("Not Redeployed");
-    }
+  const {
+    date,
+    tags,
+    description,
+    name,
+    slug,
+    thumbnailUrl,
+    entry = "",
+  } = JSON.parse(post);
+
+  const defaultDate = date ? new Date(date.seconds * 1000) : new Date();
+  const defaultMetadata = {
+    name: name || "",
+    slug: slug || "",
+    date:
+      defaultDate.getUTCFullYear() +
+      "-" +
+      (defaultDate.getUTCMonth() + 1 + "").padStart(2, "0") +
+      "-" +
+      (defaultDate.getDate() + "").padStart(2, "0"),
+    description: description || "",
+    thumbnailUrl: thumbnailUrl || "",
+    tags: tags?.join(", ") || "",
   };
+  const {
+    message,
+    setMessage,
+    password,
+    setPassword,
+    metadata,
+    setMetadata,
+    editor,
+    setEditor,
+    resetForm,
+  } = useForm(defaultMetadata, entry);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const submit = confirm("Submit?");
     if (!submit) return;
+    //could be a function
     if (
       !metadata.slug ||
       !metadata.name ||
@@ -84,23 +86,21 @@ const Admin = ({ post }) => {
       alert("Finish the form!");
       return;
     }
+    //check if this entry already exists
     const exists = await getSingleFirestoreDoc(
       COLLECTION_NAMES.JOURNALS,
       metadata.slug
     );
     if (exists?.error) {
       alert("Firebase error");
-      console.log(exists);
       return;
     }
     if (exists) {
-      console.log(exists);
       const overwrite = confirm(
         "this journal url name already exists! Want to overwrite this entry?"
       );
       if (!overwrite) return;
     }
-    console.log(stateToHTML(editor.getCurrentContent()));
     const dateArr = metadata.date.split("-");
     const date = new Date(
       `${dateArr[0]}-${dateArr[1]}-${String(Number(dateArr[2]) + 1).padStart(
@@ -108,7 +108,6 @@ const Admin = ({ post }) => {
         "0"
       )}`
     );
-    console.log(date);
     mergeFirestoreDoc(
       {
         ...metadata,
@@ -123,9 +122,8 @@ const Admin = ({ post }) => {
       COLLECTION_NAMES.JOURNALS,
       metadata.slug
     );
-    await redeploy();
-    setEditor(EditorState.createEmpty());
-    setMetadata(defaultMetadata);
+    await redeploy(password, setMessage);
+    resetForm();
   };
 
   return (
@@ -209,11 +207,11 @@ export default Admin;
 
 export const getServerSideProps = async ({ query }) => {
   const { slug } = query;
-  if (!slug) return { props: {} };
+  if (!slug) return { props: { post: "{}" } };
 
   const rawPost = await getSingleFirestoreDoc(COLLECTION_NAMES.JOURNALS, slug);
 
-  if (!rawPost || rawPost.error) return { props: {} };
+  if (!rawPost || rawPost.error) return { props: { post: "{}" } };
 
   const post = JSON.stringify(rawPost);
   return { props: { post } };
