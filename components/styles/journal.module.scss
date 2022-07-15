@@ -10,6 +10,10 @@
     max-width: 100%;
 }
 
+.container ul, .container ol {
+  list-style: inside;
+}
+
 .tag{
     background-color: #ffb6d6;
     padding: .25rem .5rem;
